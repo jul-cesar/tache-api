@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model comentario {
+  id        String   @id @default(uuid())
+  tareaId   String
+  authorId  String
+  contenido String
+  fecha     DateTime @default(now())
+  user      user     @relation(fields: [authorId], references: [id])
+  tarea     tarea    @relation(fields: [tareaId], references: [id], onDelete: Cascade)
+}
+
+model tarea {
+  id               String          @id @default(uuid())
+  titulo           String
+  descripcion      String
+  estado           estado_tarea    @default(pendiente)
+  prioridad        prioridad_tarea
+  fechaVencimiento DateTime
+  ownerId          String
+  createdAt        DateTime        @default(now())
+  asignadoId       String?
+  comentario       comentario[]
+  owner            user            @relation(name: "creadorTarea", fields: [ownerId], references: [id])
+  asignado         user?           @relation(name: "usuarioAsignado", fields: [asignadoId], references: [id])
+}
+
+model user {
+  id              String       @id @default(uuid())
+  nombre          String
+  password        String
+  email           String       @unique
+  photoURL        String?
+  comentario      comentario[]
+  tareasCreadas   tarea[]      @relation("creadorTarea")
+  tareasAsignadas tarea[]      @relation("usuarioAsignado")
+}
+
+enum estado_tarea {
+  pendiente
+  progreso
+  completada
+}
+
+enum prioridad_tarea {
+  baja
+  media
+  alta
+}
