@@ -9,6 +9,7 @@ export const jwtVerifier = (
 ) => {
   try {
     const userJwt = req.headers.authorization || "";
+    if (!userJwt) return res.sendStatus(401);
     const jwt = userJwt.split(" ").pop();
     const isUser = validateToken(`${jwt}`);
     if (!isUser) {

@@ -36,6 +36,7 @@ model user {
   id              String       @id @default(uuid())
   nombre          String
   password        String
+  refreshToken    String?
   email           String       @unique
   photoURL        String?
   comentario      comentario[]

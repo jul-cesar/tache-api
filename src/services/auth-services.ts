@@ -1,8 +1,9 @@
 import { prisma } from "../config/prisma-client";
+import { updateUser } from "../controllers/user";
 import { Auth } from "../models/auth";
 import { user } from "../models/users";
 import { Encrypt, verifiedEncryptPassword } from "../utils/handle-encrypt";
-import { generateToken } from "../utils/jwt-handle";
+import { generateRefreshToken, generateToken } from "../utils/jwt-handle";
 
 export const registerNewUser = async ({ nombre, email, password }: user) => {
   const userExists = await prisma.user.findFirst({
@@ -26,9 +27,20 @@ export const loginUser = async ({ email, password }: Auth) => {
   const isVerified = await verifiedEncryptPassword(password, passwordHashed);
   if (!isVerified) return "INCORRECT PASSWORD";
   const token = generateToken(userExists.nombre, userExists.email);
+  const refreshToken = generateRefreshToken(
+    userExists.nombre,
+    userExists.email
+  );
+  const updateUser = await prisma.user.update({
+    where: { email },
+    data: { refreshToken: refreshToken },
+  });
   const data = {
     token,
     user: userExists,
+    refreshToken,
   };
   return data;
 };
+
+
