@@ -2,6 +2,7 @@ import { Response, Request } from "express";
 import { loginUser, registerNewUser } from "../services/auth-services";
 import { handleHttp } from "../utils/error.handle";
 import { handleRefreshToken } from "../services/refresh-token-service";
+import { handleLogout } from "../services/logout-service";
 
 export const registerController = async (req: Request, res: Response) => {
   try {
@@ -24,6 +25,8 @@ export const loginController = async (req: Request, res: Response) => {
     }
     res.cookie("jwt", response.refreshToken, {
       httpOnly: true,
+      sameSite: "none",
+      secure: true,
       maxAge: 24 * 60 * 60 * 1000,
     });
     res.send({ token: response.token });
@@ -34,17 +37,28 @@ export const loginController = async (req: Request, res: Response) => {
 
 export const refreshTokenController = async (req: Request, res: Response) => {
   try {
-    const response = await handleRefreshToken(req);
-    if (
-      response === "no cookies found" ||
-      response === "no user with this refresh token" ||
-      response === "token invalido"
-    ) {
-      res.status(403).send(response);
-      return;
+    const response = await handleRefreshToken(req, res);
+    if (response.success) {
+      res.send({ accessToken: response.accessToken });
+    } else {
+      res.status(403).send(response.errorMessage);
     }
-    res.send({accessToken: response});
   } catch (error) {
-    handleHttp(res, "Incorrect password or email", error);
+    console.error("Error en refreshTokenController:", error);
+    res.status(500).send("Error interno del servidor");
+  }
+};
+
+export const logoutController = async (req: Request, res: Response) => {
+  try {
+    const response = await handleLogout(req, res);
+    if (response.success) {
+      res.sendStatus(204);
+    } else {
+      res.status(500).send(response.message);
+    }
+  } catch (error) {
+    console.error("Error en logoutController:", error);
+    handleHttp(res, "Error al cerrar sesión", error);
   }
 };

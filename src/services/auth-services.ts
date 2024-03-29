@@ -1,5 +1,4 @@
 import { prisma } from "../config/prisma-client";
-import { updateUser } from "../controllers/user";
 import { Auth } from "../models/auth";
 import { user } from "../models/users";
 import { Encrypt, verifiedEncryptPassword } from "../utils/handle-encrypt";
@@ -31,7 +30,7 @@ export const loginUser = async ({ email, password }: Auth) => {
     userExists.nombre,
     userExists.email
   );
-  const updateUser = await prisma.user.update({
+  await prisma.user.update({
     where: { email },
     data: { refreshToken: refreshToken },
   });
@@ -42,5 +41,3 @@ export const loginUser = async ({ email, password }: Auth) => {
   };
   return data;
 };
-
-

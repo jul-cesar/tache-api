@@ -5,3 +5,5 @@ export const insertUser = async (data: user) => {
   const newUser = await prisma.user.create({ data });
   return newUser;
 };
+
+

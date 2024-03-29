@@ -3,7 +3,6 @@ import Express from "express";
 import cors from "cors";
 import { router } from "./routes";
 import cookieParser from "cookie-parser"
-import { jwtVerifier } from "./middlewares/session";
 
 const PORT = process.env.PORT;
 const app = Express();

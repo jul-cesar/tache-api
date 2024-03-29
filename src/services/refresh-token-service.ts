@@ -1,22 +1,44 @@
 import { prisma } from "../config/prisma-client";
-import { Request } from "express";
-import {
-  generateRefreshToken,
-  generateToken,
-  validateRefreshToken,
-} from "../utils/jwt-handle";
+import { Request, Response } from "express";
+import { generateToken, validateRefreshToken } from "../utils/jwt-handle";
 
-export const handleRefreshToken = async (req: Request) => {
-  const cookies = req.cookies;
-  if (!cookies) return "no cookies found";
-  const refreshToken = cookies.jwt;
+interface refreshTokenResult {
+  success: boolean;
+  accessToken?: string;
+  errorMessage?: string;
+}
 
-  const foundUser = await prisma.user.findFirst({ where: {refreshToken} });
-  if (!foundUser) return "no user with this refresh token";
+export const handleRefreshToken = async (
+  req: Request,
+  res: Response
+): Promise<refreshTokenResult> => {
+  try {
+    const cookies = req.cookies;
+    if (!cookies?.jwt)
+      return {
+        success: false,
+        errorMessage: "No se encontro un refresh token en las cookies",
+      };
+    const refreshToken = cookies.jwt;
 
-  const verifyJwt = validateRefreshToken(refreshToken);
-  if (!verifyJwt) return "token invalido";
+    const foundUser = await prisma.user.findFirst({ where: { refreshToken } });
+    if (!foundUser)
+      return {
+        success: false,
+        errorMessage: "No se encontro un usuario asociado al refresh token",
+      };
 
-  const accessToken = generateToken(foundUser.nombre, foundUser.email);
-  return accessToken;
+    const verifyJwt = validateRefreshToken(refreshToken);
+    if (!verifyJwt)
+      return { success: false, errorMessage: "El refresh token no es valido" };
+
+    const accessToken = generateToken(foundUser.nombre, foundUser.email);
+    return { success: true, accessToken };
+  } catch (error) {
+    console.error("Error en handleRefreshToken:", error);
+    return {
+      success: false,
+      errorMessage: "Error al manejar el refresh token",
+    };
+  }
 };

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { handleHttp } from "../utils/error.handle";
 import {
   getAllTasksFromDb,
+  getAsignedTasksFromUser,
   getTareaById,
   getUserTasks,
   insertTask,
@@ -26,6 +27,19 @@ export const getAllTasksFromUser = async (req: Request, res: Response) => {
     res.send(response);
   } catch (error) {
     handleHttp(res, "There was an error getting user tasks", error);
+  }
+};
+
+export const getUserAsignedTasks = (req: Request, res: Response) => {
+  try {
+    const response = getAsignedTasksFromUser(req.params.userId);
+    res.send(response);
+  } catch (error) {
+    handleHttp(
+      res,
+      "There was an error getting the asigned task from the user",
+      error
+    );
   }
 };
 

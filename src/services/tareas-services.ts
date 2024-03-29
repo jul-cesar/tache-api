@@ -17,6 +17,19 @@ export const getUserTasks = async (userId: string) => {
   return userTareas;
 };
 
+export const getAsignedTasksFromUser = async (idUser: string) => {
+  const asignedTasks = await prisma.tarea.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+    include: {
+      owner: true,
+    },
+    where: { asignadoId: idUser },
+  });
+  return asignedTasks;
+};
+
 export const getAllTasksFromDb = async () => {
   const allTasks = await prisma.tarea.findMany();
   return allTasks;
