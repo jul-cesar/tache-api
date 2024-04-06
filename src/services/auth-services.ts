@@ -25,7 +25,11 @@ export const loginUser = async ({ email, password }: Auth) => {
   const passwordHashed = userExists.password;
   const isVerified = await verifiedEncryptPassword(password, passwordHashed);
   if (!isVerified) return "INCORRECT PASSWORD";
-  const token = generateToken(userExists.nombre, userExists.email);
+  const token = generateToken(
+    userExists.nombre,
+    userExists.email,
+    userExists.id
+  );
   const refreshToken = generateRefreshToken(
     userExists.nombre,
     userExists.email
@@ -36,7 +40,7 @@ export const loginUser = async ({ email, password }: Auth) => {
   });
   const data = {
     token,
-    user: userExists,
+
     refreshToken,
   };
   return data;

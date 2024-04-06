@@ -3,14 +3,14 @@ import { sign, verify } from "jsonwebtoken";
 const JWT_SECRET = process.env.JWT_SECRET || "";
 const JWT_REFRESH_SECRET = process.env.JWT_SECRET || "";
 
-export const generateToken = (nombre: string, email: string) => {
-  const jwt = sign({ nombre, email }, JWT_SECRET, { expiresIn: "30s" });
+export const generateToken = (nombre: string, email: string, id: string) => {
+  const jwt = sign({ nombre, email, id }, JWT_SECRET, { expiresIn: "10m" });
   return jwt;
 };
 
 export const generateRefreshToken = (nombre: string, email: string) => {
   const jwtRefresh = sign({ nombre, email }, JWT_REFRESH_SECRET, {
-    expiresIn: "1d",
+    expiresIn: "1y",
   });
   return jwtRefresh;
 };

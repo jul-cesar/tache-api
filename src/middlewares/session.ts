@@ -9,14 +9,13 @@ export const jwtVerifier = (
 ) => {
   try {
     const userJwt = req.headers.authorization || "";
-    if (!userJwt) return res.sendStatus(401);
+    if (!userJwt) return res.sendStatus(403);
     const jwt = userJwt.split(" ").pop();
     const isUser = validateToken(`${jwt}`);
     if (!isUser) {
       res.status(401);
     } else {
       req.user = isUser;
-      console.log(userJwt);
       next();
     }
   } catch (error) {

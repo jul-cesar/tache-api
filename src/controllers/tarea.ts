@@ -15,7 +15,7 @@ export const getAllTasks = async (req: requestExt, res: Response) => {
   try {
     const response = await getAllTasksFromDb();
 
-    res.send({ data: response, user: req.user });
+    res.send( response);
   } catch (error) {
     handleHttp(res, "There was an error getting all the taks", error);
   }

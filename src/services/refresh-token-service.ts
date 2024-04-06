@@ -32,7 +32,11 @@ export const handleRefreshToken = async (
     if (!verifyJwt)
       return { success: false, errorMessage: "El refresh token no es valido" };
 
-    const accessToken = generateToken(foundUser.nombre, foundUser.email);
+    const accessToken = generateToken(
+      foundUser.nombre,
+      foundUser.email,
+      foundUser.id
+    );
     return { success: true, accessToken };
   } catch (error) {
     console.error("Error en handleRefreshToken:", error);

@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { handleHttp } from "../utils/error.handle";
-import { insertUser } from "../services/usuarios-services";
-import { registerNewUser } from "../services/auth-services";
+
 
 export const updateUser = (req: Request, res: Response) => {
   try {
