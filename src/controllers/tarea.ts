@@ -15,7 +15,7 @@ export const getAllTasks = async (req: requestExt, res: Response) => {
   try {
     const response = await getAllTasksFromDb();
 
-    res.send( response);
+    res.send(response);
   } catch (error) {
     handleHttp(res, "There was an error getting all the taks", error);
   }
@@ -30,9 +30,9 @@ export const getAllTasksFromUser = async (req: Request, res: Response) => {
   }
 };
 
-export const getUserAsignedTasks = (req: Request, res: Response) => {
+export const getUserAsignedTasks = async (req: Request, res: Response) => {
   try {
-    const response = getAsignedTasksFromUser(req.params.userId);
+    const response = await getAsignedTasksFromUser(req.params.userId);
     res.send(response);
   } catch (error) {
     handleHttp(
