@@ -13,7 +13,7 @@ export const registerNewUser = async ({ nombre, email, password }: user) => {
   const insertUser = await prisma.user.create({
     data: { nombre, email, password: hashedPassword },
   });
-  return insertUser;
+  return { message: "user registrado correctamente" };
 };
 
 export const loginUser = async ({ email, password }: Auth) => {

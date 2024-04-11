@@ -9,8 +9,9 @@ export const registerController = async (req: Request, res: Response) => {
     const response = await registerNewUser(req.body);
     if (response === "User already exist") {
       res.status(403).send(response);
+    } else {
+      res.send(response);
     }
-    res.send(response);
   } catch (error) {
     handleHttp(res, "Error al registrar el usuario", error);
   }
