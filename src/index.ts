@@ -19,3 +19,6 @@ app.use(cookieParser());
 app.use(router);
 
 app.listen(PORT, () => console.log(`App corriendo en el puerto ${PORT}`));
+
+
+export default app
