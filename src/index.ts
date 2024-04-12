@@ -9,7 +9,7 @@ const app = Express();
 app.use(Express.json());
 
 const corsOptions = {
-  origin: "https://tache-beta.vercel.app/",
+  origin: true,
   credentials: true,
 };
 app.use(cors(corsOptions));
