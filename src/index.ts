@@ -9,7 +9,7 @@ const app = Express();
 app.use(Express.json());
 
 const corsOptions = {
-  origin: true,
+  origin: "https://tache-beta.vercel.app/",
   credentials: true,
 };
 app.use(cors(corsOptions));
@@ -20,5 +20,4 @@ app.use(router);
 
 app.listen(PORT, () => console.log(`App corriendo en el puerto ${PORT}`));
 
-
-export default app
+export default app;

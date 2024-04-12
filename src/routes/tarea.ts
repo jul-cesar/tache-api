@@ -12,7 +12,7 @@ import { jwtVerifier } from "../middlewares/session";
 
 export const router = Router();
 
-router.get("/", jwtVerifier, getAllTasks);
+router.get("/", getAllTasks);
 router.get("/:userId", jwtVerifier, getAllTasksFromUser);
 router.get("/asigned/:userId", jwtVerifier, getUserAsignedTasks);
 router.get("/byid/:id", jwtVerifier, getTaskById);
