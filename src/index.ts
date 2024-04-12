@@ -1,8 +1,8 @@
-import "dotenv/config";
 import Express from "express";
 import cors from "cors";
 import { router } from "./routes";
 import cookieParser from "cookie-parser";
+import "dotenv/config";
 
 const PORT = process.env.PORT;
 const app = Express();
