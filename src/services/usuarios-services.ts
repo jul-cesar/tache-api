@@ -6,4 +6,7 @@ export const insertUser = async (data: user) => {
   return newUser;
 };
 
-
+export const allUsers = async () => {
+  const allUsers = await prisma.user.findMany();
+  return allUsers;
+};

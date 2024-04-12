@@ -9,13 +9,13 @@ const app = Express();
 app.use(Express.json());
 
 const corsOptions = {
-    origin: 'http://localhost:5173', 
-    credentials: true, 
-  };
+  origin: true,
+
+  credentials: true,
+};
 app.use(cors(corsOptions));
 
 app.use(cookieParser());
-
 
 app.use(router);
 
