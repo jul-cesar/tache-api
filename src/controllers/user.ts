@@ -27,6 +27,9 @@ export const userInfo = async (req: Request, res: Response) => {
       email: response?.email,
       photoURL: response?.photoURL,
       id: response?.id,
+      nroComentarios: response?.comentario.length,
+      nroTareasAsignadas: response?.tareasAsignadas.length,
+      nroTareasCredas: response?.tareasCreadas.length,
     });
   } catch (error) {
     handleHttp(res, "There was an error getting the user info", error);

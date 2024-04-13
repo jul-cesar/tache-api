@@ -12,6 +12,9 @@ export const allUsers = async () => {
 };
 
 export const getUserInfo = async (idUser: string) => {
-  const userInfo = await prisma.user.findFirst({ where: { id: idUser }, });
+  const userInfo = await prisma.user.findFirst({
+    where: { id: idUser },
+    include: { comentario: true, tareasAsignadas: true, tareasCreadas: true},
+  });
   return userInfo;
 };
