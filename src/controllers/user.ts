@@ -21,7 +21,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
 
 export const userInfo = async (req: Request, res: Response) => {
   try {
-    const response = await getUserInfo(req.body.id);
+    const response = await getUserInfo(req.params.id);
     res.send({
       nombre: response?.nombre,
       email: response?.email,
