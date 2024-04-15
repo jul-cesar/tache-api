@@ -1,12 +1,11 @@
 import { Request, Response } from "express";
 import { handleHttp } from "../utils/error.handle";
 import { allUsers, getUserInfo } from "../services/usuarios-services";
-import errorMap from "zod/lib/locales/en";
 
 export const updateUser = (req: Request, res: Response) => {
   try {
   } catch (error) {
-    handleHttp(res, "There was an error updating the user", error);
+    handleHttp(res, 403, "There was an error updating the user", error);
   }
 };
 
@@ -15,7 +14,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
     const response = await allUsers();
     res.send(response);
   } catch (error) {
-    handleHttp(res, "There was an error getting all the users", error);
+    handleHttp(res, 500, "There was an error getting all the users", error);
   }
 };
 
@@ -32,6 +31,6 @@ export const userInfo = async (req: Request, res: Response) => {
       nroTareasCreadas: response?.tareasCreadas.length,
     });
   } catch (error) {
-    handleHttp(res, "There was an error getting the user info", error);
+    handleHttp(res, 403, "There was an error getting the user info", error);
   }
 };

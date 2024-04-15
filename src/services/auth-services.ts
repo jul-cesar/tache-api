@@ -10,7 +10,7 @@ export const registerNewUser = async ({ nombre, email, password }: user) => {
   });
   const hashedPassword = await Encrypt(password);
   if (userExists) return "User already exist";
-  const insertUser = await prisma.user.create({
+  await prisma.user.create({
     data: { nombre, email, password: hashedPassword },
   });
   return { message: "user registrado correctamente" };
@@ -40,7 +40,6 @@ export const loginUser = async ({ email, password }: Auth) => {
   });
   const data = {
     token,
-
     refreshToken,
   };
   return data;

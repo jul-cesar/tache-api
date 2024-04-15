@@ -13,7 +13,7 @@ export const registerController = async (req: Request, res: Response) => {
       res.send(response);
     }
   } catch (error) {
-    handleHttp(res, "Error al registrar el usuario", error);
+    handleHttp(res, 500, "Error al registrar el usuario", error);
   }
 };
 
@@ -32,7 +32,7 @@ export const loginController = async (req: Request, res: Response) => {
     });
     res.send({ token: response.token });
   } catch (error) {
-    handleHttp(res, "Incorrect password or email", error);
+    handleHttp(res, 403, "Incorrect password or email", error);
   }
 };
 
@@ -60,6 +60,6 @@ export const logoutController = async (req: Request, res: Response) => {
     }
   } catch (error) {
     console.error("Error en logoutController:", error);
-    handleHttp(res, "Error al cerrar sesión", error);
+    handleHttp(res, 403, "Error al cerrar sesión", error);
   }
 };

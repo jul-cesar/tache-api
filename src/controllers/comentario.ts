@@ -13,6 +13,7 @@ export const getAllCommentsFromATask = async (req: Request, res: Response) => {
   } catch (error) {
     handleHttp(
       res,
+      403,
       "There was an error getting all the comments from the task",
       error
     );
@@ -24,7 +25,7 @@ export const createNewComment = async (req: Request, res: Response) => {
     const response = await insertComment(req.body);
     res.send(response);
   } catch (error) {
-    handleHttp(res, "There was an error creating the comment", error);
+    handleHttp(res, 500, "There was an error creating the comment", error);
   }
 };
 
@@ -33,6 +34,6 @@ export const deleteComment = (req: Request, res: Response) => {
     const response = removeComment(req.params.id);
     res.send(response);
   } catch (error) {
-    handleHttp(res, "There was an error deleting the comment", error);
+    handleHttp(res, 403, "There was an error deleting the comment", error);
   }
 };

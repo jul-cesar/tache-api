@@ -17,7 +17,7 @@ export const getAllTasks = async (req: requestExt, res: Response) => {
 
     res.send(response);
   } catch (error) {
-    handleHttp(res, "There was an error getting all the taks", error);
+    handleHttp(res, 500, "There was an error getting all the taks", error);
   }
 };
 
@@ -26,7 +26,7 @@ export const getAllTasksFromUser = async (req: Request, res: Response) => {
     const response = await getUserTasks(req.params.userId);
     res.send(response);
   } catch (error) {
-    handleHttp(res, "There was an error getting user tasks", error);
+    handleHttp(res, 404, "There was an error getting user tasks", error);
   }
 };
 
@@ -37,6 +37,7 @@ export const getUserAsignedTasks = async (req: Request, res: Response) => {
   } catch (error) {
     handleHttp(
       res,
+      404,
       "There was an error getting the asigned task from the user",
       error
     );
@@ -48,7 +49,12 @@ export const getTaskById = async (req: Request, res: Response) => {
     const response = await getTareaById(req.params.id);
     res.send(response);
   } catch (error) {
-    handleHttp(res, "There was an error trying to get the task by id", error);
+    handleHttp(
+      res,
+      404,
+      "There was an error trying to get the task by id",
+      error
+    );
   }
 };
 
@@ -57,7 +63,7 @@ export const createNewTask = async (req: Request, res: Response) => {
     const response = await insertTask(req.body);
     res.send(response);
   } catch (error) {
-    handleHttp(res, "There was an error creating a new task", error);
+    handleHttp(res, 403, "There was an error creating a new task", error);
   }
 };
 
@@ -66,7 +72,7 @@ export const deleteTask = async (req: Request, res: Response) => {
     const response = await removeTask(req.params.id);
     res.send(response);
   } catch (error) {
-    handleHttp(res, "There was an error deleting the task", error);
+    handleHttp(res, 404, "There was an error deleting the task", error);
   }
 };
 
@@ -75,6 +81,6 @@ export const updateTasks = async (req: Request, res: Response) => {
     const response = updateATask(req.params.id, req.body);
     res.send(response);
   } catch (error) {
-    handleHttp(res, "Theere was an error updating the task", error);
+    handleHttp(res, 404, "Theere was an error updating the task", error);
   }
 };
