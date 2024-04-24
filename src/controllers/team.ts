@@ -1,6 +1,10 @@
 import { Request, Response } from "express";
 import { handleHttp } from "../utils/error.handle";
-import { addMemberToTeam, createTeam } from "../services/teams-services";
+import {
+  addMemberToTeam,
+  createTeam,
+  getUserTeams,
+} from "../services/teams-services";
 
 export const postTeam = async (req: Request, res: Response) => {
   try {
@@ -8,6 +12,15 @@ export const postTeam = async (req: Request, res: Response) => {
     res.send(response);
   } catch (error) {
     handleHttp(res, 403, "there was an error creating the team", error);
+  }
+};
+
+export const userTeams = async (req: Request, res: Response) => {
+  try {
+    const response = await getUserTeams(req.params.idUser);
+    res.send(response);
+  } catch (error) {
+    handleHttp(res, 403, "there was an error getting the teams", error);
   }
 };
 

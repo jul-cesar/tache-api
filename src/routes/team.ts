@@ -1,7 +1,8 @@
 import { Router } from "express";
-import { addMember, postTeam } from "../controllers/team";
+import { addMember, postTeam, userTeams } from "../controllers/team";
 
 export const router = Router();
 
 router.post("/", postTeam);
-router.post('/addmember/:idUser/:idTeam', addMember)
+router.post("/addmember/:idUser/:idTeam", addMember);
+router.get("/:idUser", userTeams);

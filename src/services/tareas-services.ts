@@ -43,6 +43,13 @@ export const getUserExpiredTasks = async (id: string) => {
   return expiredTasks;
 };
 
+export const getTeamTasks = async (teamId: string) => {
+  const teamTasks = await prisma.tarea.findMany({
+    where: { teamId },
+  });
+  return teamTasks;
+};
+
 export const getAsignedTasksFromUser = async (idUser: string) => {
   const asignedTasks = await prisma.tarea.findMany({
     orderBy: {
