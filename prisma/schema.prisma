@@ -17,6 +17,16 @@ model comentario {
   tarea     tarea    @relation(fields: [tareaId], references: [id], onDelete: Cascade)
 }
 
+model team {
+  id          String   @id @default(uuid())
+  nombre      String
+  integrantes user[]   @relation("TeamMember")
+  tasks       tarea[]
+  ownerId     String
+  owner       user     @relation("TeamOwner", fields: [ownerId], references: [id])
+  createdAt   DateTime @default(now())
+}
+
 model tarea {
   id               String          @id @default(uuid())
   titulo           String
@@ -30,6 +40,8 @@ model tarea {
   comentario       comentario[]
   owner            user            @relation(name: "creadorTarea", fields: [ownerId], references: [id])
   asignado         user?           @relation(name: "usuarioAsignado", fields: [asignadoId], references: [id])
+  team             team?           @relation(fields: [teamId], references: [id])
+  teamId           String?
 }
 
 model user {
@@ -42,6 +54,8 @@ model user {
   comentario      comentario[]
   tareasCreadas   tarea[]      @relation("creadorTarea")
   tareasAsignadas tarea[]      @relation("usuarioAsignado")
+  createdTeams    team[]       @relation("TeamOwner")
+  memberOfTeams   team[]       @relation("TeamMember")
 }
 
 enum estado_tarea {

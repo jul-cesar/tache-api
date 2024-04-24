@@ -17,7 +17,13 @@ export const getTaskComments = async (idTask: string) => {
       fecha: "desc",
     },
     include: {
-      user: true,
+      user: {
+        select: {
+          nombre: true,
+          email: true,
+          id: true,
+        },
+      },
       tarea: true,
     },
     where: { tareaId: idTask },

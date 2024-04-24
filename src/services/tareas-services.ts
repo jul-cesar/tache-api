@@ -2,7 +2,19 @@ import { prisma } from "../config/prisma-client";
 import { task } from "../models/tareas";
 
 export const insertTask = async (data: task) => {
-  const newTarea = await prisma.tarea.create({ data });
+  const newTarea = await prisma.tarea.create({
+    data,
+    include: {
+      owner: {
+        select: {
+          nombre: true,
+          email: true,
+          id: true,
+        },
+      },
+      team: true,
+    },
+  });
   return newTarea;
 };
 
@@ -37,7 +49,13 @@ export const getAsignedTasksFromUser = async (idUser: string) => {
       createdAt: "desc",
     },
     include: {
-      owner: true,
+      owner: {
+        select: {
+          nombre: true,
+          email: true,
+          id: true,
+        },
+      },
     },
     where: { asignadoId: idUser },
   });
