@@ -3,8 +3,8 @@ import { user } from "./users";
 import { task } from "./tareas";
 
 export interface Team {
-  id: string;
+  id?: string;
   nombre: string;
   ownerId: string;
-  createdAt: Date;
+  createdA?: Date;
 }

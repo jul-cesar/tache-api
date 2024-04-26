@@ -23,7 +23,16 @@ export const getUserTasks = async (userId: string) => {
     orderBy: {
       createdAt: "desc",
     },
-    include: { owner: true, asignado: true },
+    include: {
+      owner: {
+        select: {
+          nombre: true,
+          email: true,
+          id: true,
+        },
+      },
+      team: true,
+    },
     where: { ownerId: userId },
   });
 
@@ -32,7 +41,16 @@ export const getUserTasks = async (userId: string) => {
 
 export const getUserExpiredTasks = async (id: string) => {
   const expiredTasks = await prisma.tarea.findMany({
-    include: { owner: true, asignado: true },
+    include: {
+      owner: {
+        select: {
+          nombre: true,
+          email: true,
+          id: true,
+        },
+      },
+      team: true,
+    },
     where: {
       ownerId: id,
       fechaVencimiento: {
@@ -46,6 +64,16 @@ export const getUserExpiredTasks = async (id: string) => {
 export const getTeamTasks = async (teamId: string) => {
   const teamTasks = await prisma.tarea.findMany({
     where: { teamId },
+    include: {
+      owner: {
+        select: {
+          nombre: true,
+          email: true,
+          id: true,
+        },
+      },
+      team: true,
+    },
   });
   return teamTasks;
 };

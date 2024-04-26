@@ -22,7 +22,6 @@ export const getUserTeams = async (idUser: string) => {
   return userTeams;
 };
 
-
 export const addMemberToTeam = async (idUser: string, idTeam: string) => {
   const teamWithMember = await prisma.team.update({
     where: { id: idTeam },

@@ -19,7 +19,7 @@ router.get("/:userId", jwtVerifier, getAllTasksFromUser);
 router.get("/asigned/:userId", jwtVerifier, getUserAsignedTasks);
 router.get("/byid/:id", jwtVerifier, getTaskById);
 router.get("/expired/:id", jwtVerifier, expiredTasks);
-router.get("/team/:teamId", teamTasks)
+router.get("/team/:teamId", teamTasks);
 router.post("/", jwtVerifier, createNewTask);
 router.put("/:id", jwtVerifier, updateTasks);
 router.delete("/:id", jwtVerifier, deleteTask);
