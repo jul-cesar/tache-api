@@ -4,6 +4,8 @@ import {
   getAllTasksFromDb,
   getAsignedTasksFromUser,
   getTareaById,
+  getTeamTasks,
+  getUserExpiredTasks,
   getUserTasks,
   insertTask,
   removeTask,
@@ -39,6 +41,30 @@ export const getUserAsignedTasks = async (req: Request, res: Response) => {
       res,
       404,
       "There was an error getting the asigned task from the user",
+      error
+    );
+  }
+};
+
+export const teamTasks = async (req: Request, res: Response) => {
+  const teamId = req.params.teamId;
+  try {
+    const response = await getTeamTasks(teamId);
+    res.send(response);
+  } catch (error) {
+    handleHttp(res, 404, "There was an error getting the team tasks ", error);
+  }
+};
+
+export const expiredTasks = async (req: Request, res: Response) => {
+  try {
+    const response = await getUserExpiredTasks(req.params.id);
+    res.send(response);
+  } catch (error) {
+    handleHttp(
+      res,
+      403,
+      "There was an error getting the expired task from the user",
       error
     );
   }

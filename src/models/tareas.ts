@@ -8,6 +8,7 @@ export interface task {
   prioridad: prioridad_tarea_interf;
   fechaVencimiento: Date;
   ownerId: string;
+  teamId: string
 }
 
 export enum estado_tarea_interf {

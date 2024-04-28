@@ -2,7 +2,19 @@ import { prisma } from "../config/prisma-client";
 import { task } from "../models/tareas";
 
 export const insertTask = async (data: task) => {
-  const newTarea = await prisma.tarea.create({ data });
+  const newTarea = await prisma.tarea.create({
+    data,
+    include: {
+      owner: {
+        select: {
+          nombre: true,
+          email: true,
+          id: true,
+        },
+      },
+      team: true,
+    },
+  });
   return newTarea;
 };
 
@@ -11,10 +23,59 @@ export const getUserTasks = async (userId: string) => {
     orderBy: {
       createdAt: "desc",
     },
-    include: { owner: true, asignado: true },
+    include: {
+      owner: {
+        select: {
+          nombre: true,
+          email: true,
+          id: true,
+        },
+      },
+      team: true,
+    },
     where: { ownerId: userId },
   });
+
   return userTareas;
+};
+
+export const getUserExpiredTasks = async (id: string) => {
+  const expiredTasks = await prisma.tarea.findMany({
+    include: {
+      owner: {
+        select: {
+          nombre: true,
+          email: true,
+          id: true,
+        },
+      },
+      team: true,
+    },
+    where: {
+      ownerId: id,
+      fechaVencimiento: {
+        lt: new Date(),
+      },
+    },
+  });
+  return expiredTasks;
+};
+
+export const getTeamTasks = async (teamId: string) => {
+  const teamTasks = await prisma.tarea.findMany({
+    where: { teamId },
+    include: {
+      owner: {
+        select: {
+          nombre: true,
+          email: true,
+          id: true,
+        },
+      },
+      team: true,
+    },
+  });
+  return teamTasks;
 };
 
 export const getAsignedTasksFromUser = async (idUser: string) => {
@@ -23,7 +84,13 @@ export const getAsignedTasksFromUser = async (idUser: string) => {
       createdAt: "desc",
     },
     include: {
-      owner: true,
+      owner: {
+        select: {
+          nombre: true,
+          email: true,
+          id: true,
+        },
+      },
     },
     where: { asignadoId: idUser },
   });
