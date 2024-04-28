@@ -14,9 +14,16 @@ export const deleteTeam = async (id: string) => {
 export const getUserTeams = async (idUser: string) => {
   const userTeams = await prisma.team.findMany({
     where: {
-      integrantes: {
-        some: { id: idUser },
-      },
+      OR: [
+        {
+          integrantes: {
+            some: { id: idUser },
+          },
+        },
+        {
+          ownerId: idUser,
+        },
+      ],
     },
   });
   return userTeams;
