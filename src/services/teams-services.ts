@@ -50,3 +50,29 @@ export const addMemberToTeam = async (idUser: string, idTeam: string) => {
   });
   return teamWithMember;
 };
+
+export const constGetTeamMembers = async (idTeam: string) => {
+  const teamMembers = await prisma.team.findFirst({
+    where: { id: idTeam },
+    include: {
+      integrantes: {
+        select: {
+          nombre: true,
+          email: true,
+          id: true,
+          photoURL: true,
+        },
+      },
+      owner: {
+        select: {
+          nombre: true,
+          email: true,
+          id: true,
+          photoURL: true,
+        },
+      },
+    },
+  });
+  teamMembers?.integrantes.push(teamMembers.owner);
+  return teamMembers?.integrantes;
+};
