@@ -39,6 +39,7 @@ export const getUserTasks = async (userId: string) => {
   return userTareas;
 };
 
+
 export const getUserExpiredTasks = async (id: string) => {
   const expiredTasks = await prisma.tarea.findMany({
     include: {
@@ -66,6 +67,13 @@ export const getTeamTasks = async (teamId: string) => {
     where: { teamId },
     include: {
       owner: {
+        select: {
+          nombre: true,
+          email: true,
+          id: true,
+        },
+      },
+      asignado: {
         select: {
           nombre: true,
           email: true,
