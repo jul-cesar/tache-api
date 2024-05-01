@@ -2,8 +2,8 @@ import { Request, response, Response } from "express";
 import { handleHttp } from "../utils/error.handle";
 import {
   addMemberToTeam,
-  constGetTeamMembers,
   createTeam,
+  getTeamInfo,
   getUserTeams,
 } from "../services/teams-services";
 
@@ -41,10 +41,10 @@ export const addMember = async (req: Request, res: Response) => {
   }
 };
 
-export const teamMembers = async (req: Request, res: Response) => {
+export const teamInfo = async (req: Request, res: Response) => {
   const idTeam = req.query.id?.toString() ?? "";
   try {
-    const response = await constGetTeamMembers(idTeam);
+    const response = await getTeamInfo(idTeam);
     res.send(response);
   } catch (error) {
     handleHttp(res, 403, "there was an error getting the team members", error);
