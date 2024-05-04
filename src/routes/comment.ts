@@ -3,7 +3,7 @@ import {
   createNewComment,
   deleteComment,
   getAllCommentsFromATask,
-} from "../controllers/comentario";
+} from "../controllers/comment.controller";
 import { jwtVerifier } from "../middlewares/session";
 
 export const router = Router();

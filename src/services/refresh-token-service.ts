@@ -33,7 +33,7 @@ export const handleRefreshToken = async (
       return { success: false, errorMessage: "El refresh token no es valido" };
 
     const accessToken = generateToken(
-      foundUser.nombre,
+      foundUser.name,
       foundUser.email,
       foundUser.id
     );

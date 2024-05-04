@@ -1,10 +1,9 @@
 import { string } from "zod";
 import { user } from "./users";
-import { task } from "./tareas";
 
 export interface Team {
   id?: string;
-  nombre: string;
+  name: string;
   ownerId: string;
-  createdA?: Date;
+  createdAt?: Date;
 }

@@ -7,55 +7,55 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model comentario {
+model comment {
   id        String   @id @default(uuid())
-  tareaId   String
+  taskId    String
   authorId  String
-  contenido String
-  fecha     DateTime @default(now())
+  content   String
+  createdAt DateTime @default(now())
   user      user     @relation(fields: [authorId], references: [id])
-  tarea     tarea    @relation(fields: [tareaId], references: [id], onDelete: Cascade)
+  task      task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
 }
 
 model team {
-  id          String   @id @default(uuid())
-  nombre      String
-  integrantes user[]   @relation("TeamMember")
-  tasks       tarea[]
-  ownerId     String
-  owner       user     @relation("TeamOwner", fields: [ownerId], references: [id])
-  createdAt   DateTime @default(now())
+  id        String   @id @default(uuid())
+  name      String
+  members   user[]   @relation("TeamMember")
+  tasks     task[]
+  ownerId   String
+  owner     user     @relation("TeamOwner", fields: [ownerId], references: [id])
+  createdAt DateTime @default(now())
 }
 
-model tarea {
-  id               String          @id @default(uuid())
-  titulo           String
-  descripcion      String
-  estado           estado_tarea    @default(pendiente)
-  prioridad        prioridad_tarea
-  fechaVencimiento DateTime
-  ownerId          String
-  createdAt        DateTime        @default(now())
-  asignadoId       String?
-  comentario       comentario[]
-  owner            user            @relation(name: "creadorTarea", fields: [ownerId], references: [id])
-  asignado         user?           @relation(name: "usuarioAsignado", fields: [asignadoId], references: [id])
-  team             team?           @relation(fields: [teamId], references: [id])
-  teamId           String?
+model task {
+  id           String          @id @default(uuid())
+  title        String
+  description  String
+  state        estado_tarea    @default(pendiente)
+  priority     prioridad_tarea
+  expiringDate DateTime
+  ownerId      String
+  createdAt    DateTime        @default(now())
+  asignedId    String?
+  comentario   comment[]
+  owner        user            @relation(name: "taskCreator", fields: [ownerId], references: [id])
+  asigned      user?           @relation(name: "asignedUser", fields: [asignedId], references: [id])
+  team         team?           @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  teamId       String?
 }
 
 model user {
-  id              String       @id @default(uuid())
-  nombre          String
-  password        String
-  refreshToken    String?
-  email           String       @unique
-  photoURL        String?
-  comentario      comentario[]
-  tareasCreadas   tarea[]      @relation("creadorTarea")
-  tareasAsignadas tarea[]      @relation("usuarioAsignado")
-  createdTeams    team[]       @relation("TeamOwner")
-  memberOfTeams   team[]       @relation("TeamMember")
+  id            String    @id @default(uuid())
+  name          String
+  password      String
+  refreshToken  String?
+  email         String    @unique
+  photoURL      String?
+  comentario    comment[]
+  createdTasks  task[]    @relation("taskCreator")
+  asignedTasks  task[]    @relation("asignedUser")
+  createdTeams  team[]    @relation("TeamOwner")
+  memberOfTeams team[]    @relation("TeamMember")
 }
 
 enum estado_tarea {
