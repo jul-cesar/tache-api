@@ -3,14 +3,13 @@ import { handleHttp } from "../utils/error.handle";
 import {
   getAllTasksFromDb,
   getAsignedTasksFromUser,
-  getTareaById,
-  getTeamTasks,
+  getTaskById,
   getUserExpiredTasks,
   getUserTasks,
   insertTask,
   removeTask,
   updateATask,
-} from "../services/tareas-services";
+} from "../services/tasks-services";
 import { requestExt } from "../models/requestExt-interface";
 
 export const getAllTasks = async (req: requestExt, res: Response) => {
@@ -26,7 +25,10 @@ export const getAllTasks = async (req: requestExt, res: Response) => {
 export const getAllTasksFromUser = async (req: Request, res: Response) => {
   try {
     const response = await getUserTasks(req.params.userId);
-    res.send(response);
+    if (!response.success) {
+      res.status(403).send(response.message);
+    }
+    res.send(response.response);
   } catch (error) {
     handleHttp(res, 404, "There was an error getting user tasks", error);
   }
@@ -35,7 +37,10 @@ export const getAllTasksFromUser = async (req: Request, res: Response) => {
 export const getUserAsignedTasks = async (req: Request, res: Response) => {
   try {
     const response = await getAsignedTasksFromUser(req.params.userId);
-    res.send(response);
+    if (!response.success) {
+      res.status(403).send(response.message);
+    }
+    res.send(response.response);
   } catch (error) {
     handleHttp(
       res,
@@ -46,20 +51,13 @@ export const getUserAsignedTasks = async (req: Request, res: Response) => {
   }
 };
 
-export const teamTasks = async (req: Request, res: Response) => {
-  const teamId = req.params.teamId;
-  try {
-    const response = await getTeamTasks(teamId);
-    res.send(response);
-  } catch (error) {
-    handleHttp(res, 404, "There was an error getting the team tasks ", error);
-  }
-};
-
 export const expiredTasks = async (req: Request, res: Response) => {
   try {
     const response = await getUserExpiredTasks(req.params.id);
-    res.send(response);
+    if (!response.success) {
+      res.status(403).send(response.message);
+    }
+    res.send(response.response);
   } catch (error) {
     handleHttp(
       res,
@@ -70,9 +68,9 @@ export const expiredTasks = async (req: Request, res: Response) => {
   }
 };
 
-export const getTaskById = async (req: Request, res: Response) => {
+export const getOneTask= async (req: Request, res: Response) => {
   try {
-    const response = await getTareaById(req.params.id);
+    const response = await getTaskById(req.params.id);
     res.send(response);
   } catch (error) {
     handleHttp(
@@ -96,7 +94,10 @@ export const createNewTask = async (req: Request, res: Response) => {
 export const deleteTask = async (req: Request, res: Response) => {
   try {
     const response = await removeTask(req.params.id);
-    res.send(response);
+    if (!response.success) {
+      res.status(403).send(response.message);
+    }
+    res.send(response.response);
   } catch (error) {
     handleHttp(res, 404, "There was an error deleting the task", error);
   }
@@ -104,8 +105,11 @@ export const deleteTask = async (req: Request, res: Response) => {
 
 export const updateTasks = async (req: Request, res: Response) => {
   try {
-    const response = updateATask(req.params.id, req.body);
-    res.send(response);
+    const response = await updateATask(req.params.id, req.body);
+    if (!response.success) {
+      res.status(403).send(response.message);
+    }
+    res.send(response.response);
   } catch (error) {
     handleHttp(res, 404, "Theere was an error updating the task", error);
   }

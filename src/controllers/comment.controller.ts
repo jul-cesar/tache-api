@@ -4,7 +4,7 @@ import {
   getTaskComments,
   insertComment,
   removeComment,
-} from "../services/comentarios-services";
+} from "../services/comments-services";
 
 export const getAllCommentsFromATask = async (req: Request, res: Response) => {
   try {

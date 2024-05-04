@@ -5,21 +5,21 @@ import {
   expiredTasks,
   getAllTasks,
   getAllTasksFromUser,
-  getTaskById,
+  getOneTask,
   getUserAsignedTasks,
-  teamTasks,
   updateTasks,
-} from "../controllers/tarea";
+} from "../controllers/task.controller";
 import { jwtVerifier } from "../middlewares/session";
+import { validateResources } from "../middlewares/validateResources";
+import { taskZodScheme } from "../schemas/taskSchema";
 
 export const router = Router();
 
-router.get("/", getAllTasks);
+router.get("/", jwtVerifier, getAllTasks);
 router.get("/:userId", jwtVerifier, getAllTasksFromUser);
 router.get("/asigned/:userId", jwtVerifier, getUserAsignedTasks);
-router.get("/byid/:id", jwtVerifier, getTaskById);
+router.get("/byid/:id", jwtVerifier, getOneTask);
 router.get("/expired/:id", jwtVerifier, expiredTasks);
-router.get("/team/:teamId", teamTasks);
-router.post("/", jwtVerifier, createNewTask);
+router.post("/", jwtVerifier, validateResources(taskZodScheme), createNewTask);
 router.put("/:id", jwtVerifier, updateTasks);
 router.delete("/:id", jwtVerifier, deleteTask);

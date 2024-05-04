@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { handleHttp } from "../utils/error.handle";
-import { allUsers, getUserInfo } from "../services/usuarios-services";
+import { allUsers, getUserInfo } from "../services/users-services";
 
 export const updateUser = (req: Request, res: Response) => {
   try {
@@ -22,13 +22,13 @@ export const userInfo = async (req: Request, res: Response) => {
   try {
     const response = await getUserInfo(req.params.id);
     res.send({
-      nombre: response?.nombre,
+      name: response?.name,
       email: response?.email,
       photoURL: response?.photoURL,
       id: response?.id,
       nroComentarios: response?.comentario.length,
-      nroTareasAsignadas: response?.tareasAsignadas.length,
-      nroTareasCreadas: response?.tareasCreadas.length,
+      nroTareasAsignadas: response?.asignedTasks.length,
+      nroTareasCreadas: response?.createdTasks.length,
     });
   } catch (error) {
     handleHttp(res, 403, "There was an error getting the user info", error);

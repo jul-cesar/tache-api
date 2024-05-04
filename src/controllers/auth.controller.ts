@@ -21,7 +21,11 @@ export const loginController = async (req: Request, res: Response) => {
   try {
     const response = await loginUser(req.body);
     if (response === "INCORRECT PASSWORD" || response === "user not exist") {
-      res.status(403).send(response);
+      const errorMessage =
+        response === "INCORRECT PASSWORD"
+          ? "Contraseña incorrecta"
+          : "Usuario no existente";
+      res.status(403).send({ error: errorMessage });
       return;
     }
     res.cookie("jwt", response.refreshToken, {
@@ -32,7 +36,7 @@ export const loginController = async (req: Request, res: Response) => {
     });
     res.send({ token: response.token });
   } catch (error) {
-    handleHttp(res, 403, "Incorrect password or email", error);
+    handleHttp(res, 500, "Incorrect password or email", error);
   }
 };
 

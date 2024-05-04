@@ -14,7 +14,7 @@ export const allUsers = async () => {
 export const getUserInfo = async (idUser: string) => {
   const userInfo = await prisma.user.findUnique({
     where: { id: idUser },
-    include: { comentario: true, tareasAsignadas: true, tareasCreadas: true },
+    include: { comentario: true, asignedTasks: true, createdTasks: true },
   });
   return userInfo;
 };

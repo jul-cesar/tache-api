@@ -5,17 +5,17 @@ import { Encrypt, verifiedEncryptPassword } from "../utils/handle-encrypt";
 import { generateRefreshToken, generateToken } from "../utils/jwt-handle";
 import { createTeam } from "./teams-services";
 
-export const registerNewUser = async ({ nombre, email, password }: user) => {
+export const registerNewUser = async ({ name, email, password }: user) => {
   const userExists = await prisma.user.findFirst({
     where: { email: email },
   });
   const hashedPassword = await Encrypt(password);
   if (userExists) return "User already exist";
   const newUser = await prisma.user.create({
-    data: { nombre, email, password: hashedPassword },
+    data: { name, email, password: hashedPassword },
   });
   createTeam({
-    nombre: `${nombre.replace(" ", "-")}s-team`,
+    name: `${name.replace(" ", "-")}s-team`,
     ownerId: newUser.id,
   });
   return { message: "user registrado correctamente" };
@@ -31,12 +31,12 @@ export const loginUser = async ({ email, password }: Auth) => {
   const isVerified = await verifiedEncryptPassword(password, passwordHashed);
   if (!isVerified) return "INCORRECT PASSWORD";
   const token = generateToken(
-    userExists.nombre,
+    userExists.name,
     userExists.email,
     userExists.id
   );
   const refreshToken = generateRefreshToken(
-    userExists.nombre,
+    userExists.name,
     userExists.email
   );
   await prisma.user.update({
