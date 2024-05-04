@@ -7,6 +7,7 @@ import { handleLogout } from "../services/logout-service";
 export const registerController = async (req: Request, res: Response) => {
   try {
     const response = await registerNewUser(req.body);
+
     if (response === "User already exist") {
       res.status(403).send(response);
     } else {
