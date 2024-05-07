@@ -1,7 +1,7 @@
 export interface comment {
-  id: string;
-  tareaId: string;
+  id?: string;
+  taskId: string;
   authorId: string;
-  contenido: string;
-  fecha: Date;
+  content: string;
+  createdAt?: Date;
 }

@@ -6,7 +6,7 @@ import { generateRefreshToken, generateToken } from "../utils/jwt-handle";
 import { createTeam } from "./teams-services";
 
 export const registerNewUser = async ({ name, email, password }: user) => {
-  const userExists = await prisma.user.findUnique({
+  const userExists = await prisma.user.findFirst({
     where: { email: email },
   });
   const hashedPassword = await Encrypt(password);
@@ -15,14 +15,14 @@ export const registerNewUser = async ({ name, email, password }: user) => {
     data: { name, email, password: hashedPassword },
   });
   createTeam({
-    name: `${name.replace(" ", "-")}s-team`,
+    name: `${name.trim().replace(" ", "-")}s-team`,
     ownerId: newUser.id,
   });
   return { message: "user registrado correctamente" };
 };
 
 export const loginUser = async ({ email, password }: Auth) => {
-  const userExists = await prisma.user.findUnique({
+  const userExists = await prisma.user.findFirst({
     where: { email: email },
   });
   if (!userExists) return "user not exist";

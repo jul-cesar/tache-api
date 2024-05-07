@@ -3,6 +3,7 @@ import { handleHttp } from "../utils/error.handle";
 import {
   addMemberToTeam,
   createTeam,
+  deleteMember,
   deleteTeam,
   getTeamInfo,
   getTeamTasks,
@@ -42,16 +43,40 @@ export const userTeams = async (req: Request, res: Response) => {
 };
 
 export const addMember = async (req: Request, res: Response) => {
-  const idUser = req.params.idUser;
+  const emailUser = req.params.emailUser;
   const idTeam = req.params.idTeam;
   try {
-    const response = await addMemberToTeam(idUser, idTeam);
+    const response = await addMemberToTeam(emailUser, idTeam);
+    if (!response.success) {
+      res.send(response);
+      return;
+    }
     res.status(200).send(response);
   } catch (error) {
     handleHttp(
       res,
       500,
       "there was an error adding a member to the team",
+      error
+    );
+  }
+};
+
+export const deleteMemberFromTeam = async (req: Request, res: Response) => {
+  const idUser = req.params.idUser;
+  const idTeam = req.params.idTeam;
+  try {
+    const response = await deleteMember(idUser, idTeam);
+    if (!response.success) {
+      res.send(response);
+      return;
+    }
+    res.status(200).send(response);
+  } catch (error) {
+    handleHttp(
+      res,
+      500,
+      "there was an error deletin a member from the team",
       error
     );
   }
