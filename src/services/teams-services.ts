@@ -1,4 +1,4 @@
-import { user } from "@prisma/client";
+import { Prisma, team, user } from "@prisma/client";
 import { prisma } from "../config/prisma-client";
 import { idServiceResponse } from "../models/IdRelatedResponse";
 import { Task } from "../models/tareas";
@@ -48,30 +48,90 @@ export const getUserTeams = async (
         },
       ],
     },
-  });
-  return { success: true, response: userTeams };
-};
-
-export const addMemberToTeam = async (idUser: string, idTeam: string) => {
-  const teamWithMember = await prisma.team.update({
-    where: { id: idTeam },
-    data: {
-      members: {
-        connect: { id: idUser },
-      },
-    },
     include: {
-      members: {
+      owner: {
         select: {
           name: true,
           email: true,
           id: true,
         },
       },
-      tasks: true,
     },
   });
-  return teamWithMember;
+  return { success: true, response: userTeams };
+};
+
+export const addMemberToTeam = async (
+  emailUser: string,
+  idTeam: string
+): Promise<idServiceResponse<team>> => {
+  const userExist = await prisma.user.findUnique({
+    where: { email: emailUser },
+  });
+  if (!userExist) {
+    return {
+      success: false,
+      message: "the user you are trying to add to this team does not exist",
+    };
+  }
+  const teamExists = await prisma.team.findUnique({
+    where: { id: idTeam },
+    include: { members: true, owner: true },
+  });
+  if (!teamExists) {
+    return { success: false, message: "team does not exists" };
+  }
+
+  teamExists.members.push(teamExists.owner);
+  const isMember = teamExists.members.some(
+    (member) => member.id === userExist.id
+  );
+  if (isMember) {
+    return { success: false, message: "user already on this team" };
+  }
+  await prisma.team.update({
+    where: { id: idTeam },
+    data: {
+      members: {
+        connect: { id: userExist.id },
+      },
+    },
+  });
+  return { success: true, message: "user added" };
+};
+
+export const deleteMember = async (
+  idUser: string,
+  idTeam: string
+): Promise<idServiceResponse<team>> => {
+  const userExist = await prisma.user.findUnique({ where: { id: idUser } });
+  if (!userExist) {
+    return {
+      success: false,
+      message: "the user you are trying to delete does not exists",
+    };
+  }
+
+  const teamExists = await prisma.team.findUnique({
+    where: { id: idTeam },
+    include: { members: true },
+  });
+
+  if (!teamExists) {
+    return { success: false, message: "team does not exist" };
+  }
+
+  const updatedMembers = teamExists?.members.filter((m) => m.id !== idUser);
+
+  const deleteMember = await prisma.team.update({
+    where: { id: idTeam },
+    data: {
+      members: {
+        set: updatedMembers?.map((member) => ({ id: member.id })),
+      },
+    },
+  });
+  return { success: true, response: deleteMember, message: "user deleted" };
 };
 
 export const getTeamTasks = async (
