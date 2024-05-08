@@ -1,4 +1,4 @@
-import { Request, response, Response } from "express";
+import { Request,  Response } from "express";
 import { handleHttp } from "../utils/error.handle";
 import {
   addMemberToTeam,
@@ -24,7 +24,9 @@ export const DelTeam = async (req: Request, res: Response) => {
     const response = await deleteTeam(req.params.id);
     if (!response.success) {
       res.status(403).send(response.message);
+      return;
     }
+    res.send(response);
   } catch (error) {
     handleHttp(res, 500, "there was an error deletinf the team", error);
   }
@@ -35,8 +37,9 @@ export const userTeams = async (req: Request, res: Response) => {
     const response = await getUserTeams(req.params.idUser);
     if (!response.success) {
       res.status(403).send(response.message);
+      return;
     }
-    res.send(response.response);
+    res.status(200).send(response.response);
   } catch (error) {
     handleHttp(res, 500, "there was an error getting the teams", error);
   }

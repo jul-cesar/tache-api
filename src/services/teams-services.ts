@@ -1,4 +1,4 @@
-import { Prisma, team, user } from "@prisma/client";
+import { team, user } from "@prisma/client";
 import { prisma } from "../config/prisma-client";
 import { idServiceResponse } from "../models/IdRelatedResponse";
 import { Task } from "../models/tareas";
@@ -21,7 +21,7 @@ export const deleteTeam = async (
       message: "The team you are trying to delete does not exist",
     };
   }
-  const deletedTask = await prisma.team.delete({ where: { id } });
+  await prisma.team.delete({ where: { id } });
   return { success: true, response: `Team  deleted` };
 };
 
@@ -71,7 +71,7 @@ export const addMemberToTeam = async (
   if (!userExist) {
     return {
       success: false,
-      message: "the user you are trying to add to this team does not exist",
+      message: "El usuario que intentas agregar a este team no existe",
     };
   }
   const teamExists = await prisma.team.findUnique({
@@ -87,7 +87,10 @@ export const addMemberToTeam = async (
     (member) => member.id === userExist.id
   );
   if (isMember) {
-    return { success: false, message: "user already on this team" };
+    return {
+      success: false,
+      message: "Este usuario ya se encuentra en el team",
+    };
   }
   await prisma.team.update({
     where: { id: idTeam },
@@ -97,7 +100,7 @@ export const addMemberToTeam = async (
       },
     },
   });
-  return { success: true, message: "user added" };
+  return { success: true, message: "Usuario agregado" };
 };
 
 export const deleteMember = async (
