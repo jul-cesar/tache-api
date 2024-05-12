@@ -48,7 +48,7 @@ model user {
   id            String    @id @default(uuid())
   name          String
   password      String
-  refreshToken  String?
+  refreshToken  String?   @unique
   email         String    @unique
   photoURL      String?
   comentario    comment[]
@@ -56,7 +56,11 @@ model user {
   asignedTasks  task[]    @relation("asignedUser")
   createdTeams  team[]    @relation("TeamOwner")
   memberOfTeams team[]    @relation("TeamMember")
+
+  @@index([email], name: "idx_user_email")
+  @@index([refreshToken], name: "idx_user_refreshToken")
 }
+
 
 enum estado_tarea {
   pendiente

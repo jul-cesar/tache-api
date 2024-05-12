@@ -43,7 +43,7 @@ export const loginController = async (req: Request, res: Response) => {
 
 export const refreshTokenController = async (req: Request, res: Response) => {
   try {
-    const response = await handleRefreshToken(req, res);
+    const response = await handleRefreshToken(req);
     if (response.success) {
       res.send({ accessToken: response.accessToken });
     } else {

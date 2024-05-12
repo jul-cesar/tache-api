@@ -9,8 +9,7 @@ interface refreshTokenResult {
 }
 
 export const handleRefreshToken = async (
-  req: Request,
-  res: Response
+  req: Request
 ): Promise<refreshTokenResult> => {
   try {
     const cookies = req.cookies;
@@ -21,7 +20,7 @@ export const handleRefreshToken = async (
       };
     const refreshToken = cookies.jwt;
 
-    const foundUser = await prisma.user.findFirst({ where: { refreshToken } });
+    const foundUser = await prisma.user.findUnique({ where: { refreshToken } });
     if (!foundUser)
       return {
         success: false,

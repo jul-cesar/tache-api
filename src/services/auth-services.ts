@@ -36,6 +36,7 @@ export const loginUser = async ({ email, password }: Auth) => {
     where: { email },
     data: { refreshToken: refreshToken },
   });
+
   const data = {
     token,
     refreshToken,
