@@ -10,7 +10,7 @@ export const generateToken = (nombre: string, email: string, id: string) => {
 
 export const generateRefreshToken = (nombre: string, email: string) => {
   const jwtRefresh = sign({ nombre, email }, JWT_REFRESH_SECRET, {
-    expiresIn: "1y",
+    expiresIn: "30d",
   });
   return jwtRefresh;
 };
