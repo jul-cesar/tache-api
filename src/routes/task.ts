@@ -15,7 +15,7 @@ import { taskZodScheme } from "../schemas/taskSchema";
 
 export const router = Router();
 
-router.get("/", jwtVerifier, getAllTasks);
+router.get("/", getAllTasks);
 router.get("/:userId", jwtVerifier, getAllTasksFromUser);
 router.get("/asigned/:userId", jwtVerifier, getUserAsignedTasks);
 router.get("/byid/:id", jwtVerifier, getOneTask);

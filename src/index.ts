@@ -4,7 +4,7 @@ import { router } from "./routes";
 import cookieParser from "cookie-parser";
 import "dotenv/config";
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3001;
 export const app = Express();
 app.use(Express.json());
 
