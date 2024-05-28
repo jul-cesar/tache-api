@@ -26,7 +26,7 @@ export const loginController = async (req: Request, res: Response) => {
         response === "INCORRECT PASSWORD"
           ? "Contraseña incorrecta"
           : "Usuario no existente";
-      res.status(403).send({ error: errorMessage });
+      res.status(401).send({ error: errorMessage });
       return;
     }
     res.cookie("jwt", response.refreshToken, {

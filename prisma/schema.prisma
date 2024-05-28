@@ -61,7 +61,6 @@ model user {
   @@index([refreshToken], name: "idx_user_refreshToken")
 }
 
-
 enum estado_tarea {
   pendiente
   progreso

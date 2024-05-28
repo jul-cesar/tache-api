@@ -6,8 +6,8 @@ import {
 } from "../controllers/user.controller";
 import { jwtVerifier } from "../middlewares/session";
 
-export const router = Router();
+export const userRouter = Router();
 
-router.get("/all", jwtVerifier, getAllUsers);
-router.get("/:id", jwtVerifier, userInfo);
-router.put("/:id", jwtVerifier, updateUser);
+userRouter.get("/all", jwtVerifier, getAllUsers);
+userRouter.get("/:id", jwtVerifier, userInfo);
+userRouter.put("/:id", jwtVerifier, updateUser);

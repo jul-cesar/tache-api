@@ -13,13 +13,13 @@ import { jwtVerifier } from "../middlewares/session";
 import { validateResources } from "../middlewares/validateResources";
 import { taskZodScheme } from "../schemas/taskSchema";
 
-export const router = Router();
+export const taskRouter = Router();
 
-router.get("/", getAllTasks);
-router.get("/:userId", jwtVerifier, getAllTasksFromUser);
-router.get("/asigned/:userId", jwtVerifier, getUserAsignedTasks);
-router.get("/byid/:id", jwtVerifier, getOneTask);
-router.get("/expired/:id", jwtVerifier, expiredTasks);
-router.post("/", jwtVerifier, validateResources(taskZodScheme), createNewTask);
-router.put("/:id", jwtVerifier, updateTasks);
-router.delete("/:id", jwtVerifier, deleteTask);
+taskRouter.get("/", getAllTasks);
+taskRouter.get("/:userId", jwtVerifier, getAllTasksFromUser);
+taskRouter.get("/asigned/:userId", jwtVerifier, getUserAsignedTasks);
+taskRouter.get("/byid/:id", jwtVerifier, getOneTask);
+taskRouter.get("/expired/:id", jwtVerifier, expiredTasks);
+taskRouter.post("/", jwtVerifier, validateResources(taskZodScheme), createNewTask);
+taskRouter.put("/:id", jwtVerifier, updateTasks);
+taskRouter.delete("/:id", jwtVerifier, deleteTask);
