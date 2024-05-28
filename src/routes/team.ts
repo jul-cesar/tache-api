@@ -10,13 +10,13 @@ import {
 } from "../controllers/team.controller";
 import { jwtVerifier } from "../middlewares/session";
 
-export const router = Router();
+export const teamRouter = Router();
 
-router.post("/", jwtVerifier, postTeam);
+teamRouter.post("/", jwtVerifier, postTeam);
 
-router.delete("/:id", jwtVerifier, DelTeam);
-router.put("/addmember/:emailUser/:idTeam", jwtVerifier, addMember);
-router.put("/delmember/:idUser/:idTeam", deleteMemberFromTeam);
-router.get("/:idUser", jwtVerifier, userTeams);
-router.get("/", jwtVerifier, teamInfo);
-router.get("/tasks/:teamId", jwtVerifier, teamTasks);
+teamRouter.delete("/:id", jwtVerifier, DelTeam);
+teamRouter.put("/addmember/:emailUser/:idTeam", jwtVerifier, addMember);
+teamRouter.put("/delmember/:idUser/:idTeam", deleteMemberFromTeam);
+teamRouter.get("/:idUser", jwtVerifier, userTeams);
+teamRouter.get("/", jwtVerifier, teamInfo);
+teamRouter.get("/tasks/:teamId", jwtVerifier, teamTasks);

@@ -1,21 +1,21 @@
 import { Router } from "express";
-import { readdirSync } from "fs";
+import { authRouter } from "./auth";
+import { commentRouter } from "./comment";
+import { taskRouter } from "./task";
+import { teamRouter } from "./team";
+import { userRouter } from "./user";
+import { refreshRouter } from "./refresh";
+import { LogOutrouter } from "./logout";
 
-const PATH_ROUTER = `${__dirname}`;
+
 const router = Router();
 
-const cleanFileName = (fileName: string) => {
-  const file = fileName.split(".").shift();
-  return file;
-};
-
-readdirSync(PATH_ROUTER).filter((fileName) => {
-  const cleanName = cleanFileName(fileName);
-  if (cleanName != "index") {
-    import(`./${cleanName}`).then((moduleRouter) =>
-      router.use(`/${cleanName}`, moduleRouter.router)
-    );
-  }
-});
+router.use("/auth", authRouter);
+router.use("/comment", commentRouter);
+router.use("/task", taskRouter);
+router.use("/team", teamRouter);
+router.use("/user", userRouter);
+router.use("/refresh", refreshRouter);
+router.use("/logout", LogOutrouter);
 
 export { router };

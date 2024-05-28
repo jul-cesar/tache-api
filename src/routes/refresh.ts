@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { refreshTokenController } from "../controllers/auth.controller";
 
-export const router = Router();
+export const refreshRouter = Router();
 
-router.get("/", refreshTokenController);
+refreshRouter.get("/", refreshTokenController);

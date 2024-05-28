@@ -1,8 +1,8 @@
 import Express from "express";
 import cors from "cors";
-import { router } from "./routes";
 import cookieParser from "cookie-parser";
 import "dotenv/config";
+import { router } from "./routes";
 
 const PORT = process.env.PORT || 3001;
 export const app = Express();
@@ -15,6 +15,10 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use(cookieParser());
+
+app.get("/test", (req, res) => {
+  res.send("Test route working");
+});
 
 app.use(router);
 

@@ -6,8 +6,8 @@ import {
 } from "../controllers/comment.controller";
 import { jwtVerifier } from "../middlewares/session";
 
-export const router = Router();
+export const commentRouter = Router();
 
-router.get("/:id", jwtVerifier, getAllCommentsFromATask);
-router.post("/", jwtVerifier, createNewComment);
-router.delete("/:id", jwtVerifier, deleteComment);
+commentRouter.get("/:id", jwtVerifier, getAllCommentsFromATask);
+commentRouter.post("/", jwtVerifier, createNewComment);
+commentRouter.delete("/:id", jwtVerifier, deleteComment);

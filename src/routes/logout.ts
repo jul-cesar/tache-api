@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { logoutController } from "../controllers/auth.controller";
 
-export const router = Router();
+export const LogOutrouter = Router();
 
-router.get("/", logoutController);
+LogOutrouter.get("/", logoutController);
