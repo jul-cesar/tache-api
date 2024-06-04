@@ -1,0 +1,28 @@
+name: CI/CD Pipeline
+
+on: 
+  push: 
+    branches: ["main"]
+  pull_request: 
+    branches: ["main"]
+
+jobs: 
+  create-docker-image:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.TOKEN_CD }}
+
+      - name: Build Docker image
+        run: docker build -t ghcr.io/jul-cesar/tache-api:latest .
+
+      - name: Push Docker image
+        run: docker push ghcr.io/jul-cesar/tache-api:latest
