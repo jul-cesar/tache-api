@@ -1,12 +1,12 @@
 name: CI/CD Pipeline
 
-on: 
-  push: 
+on:
+  push:
     branches: ["main"]
-  pull_request: 
+  pull_request:
     branches: ["main"]
 
-jobs: 
+jobs:
   create-docker-image:
     runs-on: ubuntu-latest
 
@@ -26,3 +26,5 @@ jobs:
 
       - name: Push Docker image
         run: docker push ghcr.io/jul-cesar/tache-api:latest
+
+     

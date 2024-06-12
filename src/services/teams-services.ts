@@ -65,19 +65,23 @@ export const addMemberToTeam = async (
   emailUser: string,
   idTeam: string
 ): Promise<idServiceResponse<team>> => {
-  const userExist = await prisma.user.findUnique({
-    where: { email: emailUser },
-  });
+  const [userExist, teamExists] = await Promise.all([
+    prisma.user.findUnique({
+      where: { email: emailUser },
+    }),
+    prisma.team.findUnique({
+      where: { id: idTeam },
+      include: { members: true, owner: true },
+    }),
+  ]);
+
   if (!userExist) {
     return {
       success: false,
       message: "El usuario que intentas agregar a este team no existe",
     };
   }
-  const teamExists = await prisma.team.findUnique({
-    where: { id: idTeam },
-    include: { members: true, owner: true },
-  });
+
   if (!teamExists) {
     return { success: false, message: "team does not exists" };
   }
@@ -107,18 +111,20 @@ export const deleteMember = async (
   idUser: string,
   idTeam: string
 ): Promise<idServiceResponse<team>> => {
-  const userExist = await prisma.user.findUnique({ where: { id: idUser } });
+  const [userExist, teamExists] = await Promise.all([
+    prisma.user.findUnique({ where: { id: idUser } }),
+    prisma.team.findUnique({
+      where: { id: idTeam },
+      include: { members: true },
+    }),
+  ]);
+
   if (!userExist) {
     return {
       success: false,
       message: "the user you are trying to delete does not exists",
     };
   }
-
-  const teamExists = await prisma.team.findUnique({
-    where: { id: idTeam },
-    include: { members: true },
-  });
 
   if (!teamExists) {
     return { success: false, message: "team does not exist" };

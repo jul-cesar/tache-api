@@ -22,37 +22,58 @@ export const insertTask = async (data: Task) => {
 export const getUserTasks = async (
   userId: string
 ): Promise<idServiceResponse<Task[]>> => {
-  const userExists = prisma.user.findUnique({ where: { id: userId } });
+  const [userExists, userTasks] = await Promise.all([
+    prisma.user.findUnique({ where: { id: userId } }),
+    prisma.task.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        owner: {
+          select: {
+            name: true,
+            email: true,
+            id: true,
+          },
+        },
+        team: true,
+      },
+      where: { ownerId: userId },
+    }),
+  ]);
   if (!userExists) {
     return {
       success: false,
       message: "The user you are trying to get the tasks from does not exist",
     };
   }
-  const usertasks = await prisma.task.findMany({
-    orderBy: {
-      createdAt: "desc",
-    },
-    include: {
-      owner: {
-        select: {
-          name: true,
-          email: true,
-          id: true,
-        },
-      },
-      team: true,
-    },
-    where: { ownerId: userId },
-  });
-
-  return { success: true, response: usertasks };
+  return { success: true, response: userTasks };
 };
 
 export const getUserExpiredTasks = async (
   id: string
 ): Promise<idServiceResponse<Task[]>> => {
-  const userExists = prisma.user.findUnique({ where: { id } });
+  const [userExists, expiredTasks] = await Promise.all([
+    prisma.user.findUnique({ where: { id } }),
+    prisma.task.findMany({
+      include: {
+        owner: {
+          select: {
+            name: true,
+            email: true,
+            id: true,
+          },
+        },
+        team: true,
+      },
+      where: {
+        ownerId: id,
+        expiringDate: {
+          lt: new Date(),
+        },
+      },
+    }),
+  ]);
   if (!userExists) {
     return {
       success: false,
@@ -60,24 +81,7 @@ export const getUserExpiredTasks = async (
         "The user you are trying to get the expired tasks from does not exist",
     };
   }
-  const expiredTasks = await prisma.task.findMany({
-    include: {
-      owner: {
-        select: {
-          name: true,
-          email: true,
-          id: true,
-        },
-      },
-      team: true,
-    },
-    where: {
-      ownerId: id,
-      expiringDate: {
-        lt: new Date(),
-      },
-    },
-  });
+
   return { success: true, response: expiredTasks };
 };
 
