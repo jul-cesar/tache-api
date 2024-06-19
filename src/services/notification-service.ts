@@ -14,3 +14,15 @@ export const createNotification = async (
   });
   return newNotification;
 };
+
+export const getUserNotifications = async (idUser: string) => {
+  const userNotifications = await prisma.notification.findMany({
+    where: {
+      ownerId: idUser,
+    },
+    orderBy: {
+      createdAt: "desc"
+    }
+  });
+  return userNotifications;
+};

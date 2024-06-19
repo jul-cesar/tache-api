@@ -1,6 +1,7 @@
 import { prisma } from "../config/prisma-client";
 import { idServiceResponse } from "../models/IdRelatedResponse";
 import { Task } from "../models/tareas";
+import { createNotification } from "./notification-service";
 
 export const insertTask = async (data: Task) => {
   const newtask = await prisma.task.create({
@@ -130,6 +131,9 @@ export const updateATask = async (
     where: { id },
     data,
   });
+  if(data.asignedId){
+    await createNotification(data.asignedId, `Se te ha asignado la tarea: ${data.title}`, "El admin de un team te asigno una tarea")
+  }
   return { success: true, response: updatedTask };
 };
 

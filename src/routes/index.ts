@@ -6,7 +6,7 @@ import { teamRouter } from "./team";
 import { userRouter } from "./user";
 import { refreshRouter } from "./refresh";
 import { LogOutrouter } from "./logout";
-
+import { notificationRouter } from "./notification";
 
 const router = Router();
 
@@ -17,5 +17,6 @@ router.use("/team", teamRouter);
 router.use("/user", userRouter);
 router.use("/refresh", refreshRouter);
 router.use("/logout", LogOutrouter);
+router.use("/notification", notificationRouter);
 
 export { router };

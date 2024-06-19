@@ -8,6 +8,7 @@ export interface Task {
   priority: prioridad_tarea;
   expiringDate: Date;
   ownerId: string;
+  asignedId: string | null
   teamId: string | null;
 }
 
