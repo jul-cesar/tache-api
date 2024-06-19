@@ -3,6 +3,7 @@ import { prisma } from "../config/prisma-client";
 import { idServiceResponse } from "../models/IdRelatedResponse";
 import { Task } from "../models/tareas";
 import { Team } from "../models/team";
+import { createNotification } from "./notification-service";
 
 export const createTeam = async (data: Team) => {
   const newTeam = await prisma.team.create({ data });
@@ -100,6 +101,12 @@ export const addMemberToTeam = async (
       },
     },
   });
+
+  await createNotification(
+    userExist.id,
+    `Bienvenido a ${teamExists.name}`,
+    "Has sido agregado a un team por su admin"
+  );
   return { success: true, message: "Usuario agregado" };
 };
 
@@ -134,6 +141,11 @@ export const deleteMember = async (
       },
     },
   });
+  await createNotification(
+    userExist.id,
+    `Has sido expulsado de ${teamExists.name}`,
+    "Has sido expulsado de este team por su admin, no tendras mas acceso a sus tareas"
+  );
   return { success: true, response: deleteMember, message: "user deleted" };
 };
 

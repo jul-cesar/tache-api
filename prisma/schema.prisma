@@ -46,20 +46,30 @@ model task {
 }
 
 model user {
-  id            String    @id @default(uuid())
+  id            String         @id @default(uuid())
   name          String
   password      String
-  refreshToken  String?   @unique
-  email         String    @unique
+  refreshToken  String?        @unique
+  email         String         @unique
   photoURL      String?
   comentario    comment[]
-  createdTasks  task[]    @relation("taskCreator")
-  asignedTasks  task[]    @relation("asignedUser")
-  createdTeams  team[]    @relation("TeamOwner")
-  memberOfTeams team[]    @relation("TeamMember")
+  createdTasks  task[]         @relation("taskCreator")
+  asignedTasks  task[]         @relation("asignedUser")
+  createdTeams  team[]         @relation("TeamOwner")
+  memberOfTeams team[]         @relation("TeamMember")
+  notification  notification[] @relation("notiOwner")
 
   @@index([email], name: "idx_user_email")
   @@index([refreshToken], name: "idx_user_refreshToken")
+}
+
+model notification {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  createdAt   DateTime @default(now())
+  ownerId     String
+  owner       user     @relation(name: "notiOwner", fields: [ownerId], references: [id])
 }
 
 enum estado_tarea {
